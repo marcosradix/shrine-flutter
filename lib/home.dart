@@ -26,7 +26,10 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  String get _currencySimble => "R\$";
+  String get _localeCurrency => "pt_BR";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +67,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-    List<Card> _buildGridCards(BuildContext context) {
+  List<Card> _buildGridCards(BuildContext context) {
     List<Product> products = getProducts(Category.all);
 
     if (products == null || products.isEmpty) {
@@ -72,8 +75,8 @@ class HomePageState extends State<HomePage> {
     }
 
     final ThemeData theme = Theme.of(context);
-    final NumberFormat formatter = NumberFormat.simpleCurrency(
-        locale: Localizations.localeOf(context).toString());
+    final NumberFormat formatter =
+        NumberFormat.currency(symbol: _currencySimble, locale: _localeCurrency);
 
     return products.map((product) {
       return Card(

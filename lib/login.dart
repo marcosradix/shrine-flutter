@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
               controller: _usernameController,
               decoration: InputDecoration(
                 filled: true,
-                labelText: 'Username',
+                labelText: 'Usuário',
               ),
             ),
             SizedBox(height: 12.0),
@@ -51,21 +51,21 @@ class _LoginPageState extends State<LoginPage> {
               controller: _passwordController,
               decoration: InputDecoration(
                 filled: true,
-                labelText: 'Password',
+                labelText: 'Senha',
               ),
               obscureText: true,
             ),
             ButtonBar(
               children: <Widget>[
                 FlatButton(
-                  child: Text('CANCEL'),
+                  child: Text('CANCELAR'),
                   onPressed: () {
                     _usernameController.clear();
                     _passwordController.clear();
                   },
                 ),
                 RaisedButton(
-                  child: Text('NEXT'),
+                  child: Text('ENTRAR'),
                   onPressed: () {
                     Navigator.pop(context);
                   },

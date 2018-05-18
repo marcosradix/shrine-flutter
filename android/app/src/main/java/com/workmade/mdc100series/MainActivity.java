@@ -1,4 +1,4 @@
-package com.example.mdc100series;
+package com.workmade.mdc100series;
 
 import android.os.Bundle;
 
