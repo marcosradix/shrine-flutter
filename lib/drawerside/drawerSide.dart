@@ -8,7 +8,7 @@ class DrawerSide extends StatefulWidget {
 }
 
 class _DrawerSideState extends State<DrawerSide> {
-   final snackBar = new SnackBar(
+  final snackBar = new SnackBar(
     content: new Text("Texto copiado com sucesso!"),
   );
   @override
@@ -37,13 +37,17 @@ class _DrawerSideState extends State<DrawerSide> {
           new ListTile(
             title: new Text("Cadastro"),
             onTap: () {
-              this.actionTile("Cadastro");
+              //this.actionTile("Cadastro");
+              Navigator.of(context).pop();
+              alertDialogFull("Cadastro");
             },
           ),
           new ListTile(
             title: new Text("Edição"),
             onTap: () {
-              this.actionTile("Edição");
+              //this.actionTile("Edição");
+              Navigator.of(context).pop();
+              alertDialogFull("Edição");
             },
           ),
         ],
@@ -51,12 +55,21 @@ class _DrawerSideState extends State<DrawerSide> {
     );
   }
 
-  actionTile(String value) {
-    print(value);
-
-    return  new SnackBar(
-    content: new Text(value),
-  );
-    
+  alertDialogFull(String value) {
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+            title: new Text("Informação"),
+            content: new Text(value),
+            actions: <Widget>[
+              new FlatButton(
+                child: const Text("Ok"),
+                onPressed: () {
+                  Navigator.of(_).pop();
+                },
+              ),
+            ],
+          ),
+    );
   }
 }
