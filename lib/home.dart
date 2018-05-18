@@ -16,17 +16,29 @@ import 'package:flutter/material.dart';
 import 'model/data.dart';
 import 'model/product.dart';
 import 'package:intl/intl.dart';
+import 'package:Shrine/drawerside/drawerSide.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  HomePageState createState() {
+    return new HomePageState();
+  }
+}
+
+class HomePageState extends State<HomePage> {
+   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: DrawerSide(),
       appBar: AppBar(
         title: Text('SHRINE'),
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
             print('Menu button');
+            this._scaffoldKey.currentState.openDrawer();
           },
         ),
         actions: <Widget>[
@@ -52,7 +64,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  List<Card> _buildGridCards(BuildContext context) {
+    List<Card> _buildGridCards(BuildContext context) {
     List<Product> products = getProducts(Category.all);
 
     if (products == null || products.isEmpty) {
