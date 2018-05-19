@@ -58,14 +58,14 @@ class _DrawerSideState extends State<DrawerSide> {
   alertDialogFull(String value) {
     showDialog(
       context: context,
-      builder: (_) => new AlertDialog(
+      builder: (contex) => new AlertDialog(
             title: new Text("Informação"),
             content: new Text(value),
             actions: <Widget>[
               new FlatButton(
                 child: const Text("Ok"),
                 onPressed: () {
-                  Navigator.of(_).pop();
+                  Navigator.of(contex).pop();
                 },
               ),
             ],

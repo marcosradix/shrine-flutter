@@ -1,3 +1,5 @@
+import 'dart:async';
+
 // Copyright 2018-present the Flutter authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +22,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  String get getUsuario => "Marcos";
+  String get getSenha => "1234";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -66,8 +73,27 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 RaisedButton(
                   child: Text('ENTRAR'),
-                  onPressed: () {
-                    Navigator.pop(context);
+                  onPressed: () async{
+                    if (this._passwordController.text == this.getSenha &&
+                        this._usernameController.text == this.getUsuario) {
+                      this._passwordController.clear();
+                      this._usernameController.clear();
+                      _scaffoldKey.currentState.showSnackBar(
+                        new SnackBar(
+                          content: new Text("Logado com sucesso!"),
+                          duration: Duration(milliseconds: 3000),
+                        ),
+                      );
+                      await new Future.delayed(const Duration(seconds: 1));
+                      Navigator.pop(context);
+                    } else {
+                      _scaffoldKey.currentState.showSnackBar(
+                        new SnackBar(
+                          content: new Text("Dados não conferem!"),
+                          duration: Duration(milliseconds: 3000),
+                        ),
+                      );
+                    }
                   },
                 ),
               ],
