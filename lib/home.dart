@@ -83,15 +83,24 @@ class HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            AspectRatio(
-              aspectRatio: 18 / 11,
-              child: Image.asset(
-                product.assetName,
-                //imagens
-                package: product.assetPackage,
-                fit: BoxFit.fitWidth,
+
+            new InkWell(
+              child:
+              AspectRatio(
+                aspectRatio: 18 / 11,
+                child: Image.asset(
+                  product.assetName,
+                  //imagens
+                  package: product.assetPackage,
+                  fit: BoxFit.fitWidth,
+                ),
               ),
+              onTap: (){
+                //exibir alert
+                alertDialogFull(product.name,"R\$ ${product.price.toString()}" );
+              },
             ),
+
             Expanded(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
@@ -116,5 +125,24 @@ class HomePageState extends State<HomePage> {
         ),
       );
     }).toList();
+  }
+
+  alertDialogFull(String value, String nomeProduto) {
+    String nome = nomeProduto;
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+        title: new Text(nome),
+        content: new Text(value),
+        actions: <Widget>[
+          new FlatButton(
+            child: const Text("Ok"),
+            onPressed: () {
+              Navigator.of(_).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
