@@ -1,22 +1,9 @@
-// Copyright 2018-present the Flutter authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 import 'package:flutter/material.dart';
 import 'model/data.dart';
 import 'model/product.dart';
 import 'package:intl/intl.dart';
 import 'package:Shrine/drawerside/drawerSide.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,36 +16,52 @@ class HomePageState extends State<HomePage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   String get _currencySimble => "R\$";
   String get _localeCurrency => "pt_BR";
+  SearchBar searchBar;
+
+  AppBar buildAppBar(BuildContext context) {
+    return new AppBar(
+      title: new Text('SHRINE'),
+      actions: [
+        searchBar.getSearchAction(context),
+        IconButton(
+          icon: Icon(Icons.tune),
+          onPressed: () {
+            print('Filter button');
+          },
+        ),
+      ],
+      leading: IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: () {
+          print('Menu button');
+          this._scaffoldKey.currentState.openDrawer();
+        },
+      ),
+    );
+  }
+
+  void onSubmitted(String value) {
+    setState(() => _scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text('Você escreveu $value!'))));
+  }
+
+  @override
+  void initState() {
+    searchBar = new SearchBar(
+        inBar: false,
+        hintText: "Pesquisar",
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onSubmitted: onSubmitted);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       drawer: DrawerSide(),
-      appBar: AppBar(
-        title: Text('SHRINE'),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            print('Menu button');
-            this._scaffoldKey.currentState.openDrawer();
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              print('Search button');
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.tune),
-            onPressed: () {
-              print('Filter button');
-            },
-          ),
-        ],
-      ),
+      appBar: this.searchBar.build(context),
       body: GridView.count(
           crossAxisCount: 2,
           padding: EdgeInsets.all(16.0),
@@ -83,10 +86,8 @@ class HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
             new InkWell(
-              child:
-              AspectRatio(
+              child: AspectRatio(
                 aspectRatio: 18 / 11,
                 child: Image.asset(
                   product.assetName,
@@ -95,12 +96,12 @@ class HomePageState extends State<HomePage> {
                   fit: BoxFit.fitWidth,
                 ),
               ),
-              onTap: (){
+              onTap: () {
                 //exibir alert
-                alertDialogFull(product.name,"R\$ ${product.price.toString()}" );
+                alertDialogFull(
+                    product.name, product.price);
               },
             ),
-
             Expanded(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
@@ -127,22 +128,24 @@ class HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  alertDialogFull(String value, String nomeProduto) {
+  alertDialogFull(String nomeProduto, int price) {
+    final NumberFormat formatter =
+        NumberFormat.currency(symbol: _currencySimble, locale: _localeCurrency);
     String nome = nomeProduto;
     showDialog(
       context: context,
       builder: (_) => new AlertDialog(
-        title: new Text(nome),
-        content: new Text(value),
-        actions: <Widget>[
-          new FlatButton(
-            child: const Text("Ok"),
-            onPressed: () {
-              Navigator.of(_).pop();
-            },
+            title: new Text(nome),
+            content: new Text("${formatter.format(price)}"),
+            actions: <Widget>[
+              new FlatButton(
+                child: const Text("Ok"),
+                onPressed: () {
+                  Navigator.of(_).pop();
+                },
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }

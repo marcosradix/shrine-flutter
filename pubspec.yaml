@@ -5,6 +5,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.15.6
+  flutter_search_bar: "^2.0.3"
 
   cupertino_icons: ^0.1.0
   shrine_images: 1.0.0
