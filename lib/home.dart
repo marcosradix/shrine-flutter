@@ -16,6 +16,7 @@ class HomePageState extends State<HomePage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   String get _currencySimble => "R\$";
   String get _localeCurrency => "pt_BR";
+  String pesquisa;
   SearchBar searchBar;
 
   AppBar buildAppBar(BuildContext context) {
@@ -41,15 +42,19 @@ class HomePageState extends State<HomePage> {
   }
 
   void onSubmitted(String value) {
-    setState(() => _scaffoldKey.currentState
-        .showSnackBar(new SnackBar(content: new Text('Você escreveu $value!'))));
+ 
+      this.pesquisa = value.toLowerCase();
+      _buildGridCards(context);
+  
+    setState(() => _scaffoldKey.currentState.showSnackBar(
+        new SnackBar(content: new Text('Você escreveu $value!'))));
   }
 
   @override
   void initState() {
     searchBar = new SearchBar(
         inBar: false,
-        hintText: "Pesquisar",
+        hintText: "pesquise por, roupas, casa ou outros",
         buildDefaultAppBar: buildAppBar,
         setState: setState,
         onSubmitted: onSubmitted);
@@ -71,7 +76,20 @@ class HomePageState extends State<HomePage> {
   }
 
   List<Card> _buildGridCards(BuildContext context) {
-    List<Product> products = getProducts(Category.all);
+    Category category;
+switch (this.pesquisa) {
+    case "casa": category = Category.home;
+    break;
+    case "roupas": category = Category.clothing;
+    break;
+     case "outros": category = Category.accessories;
+    break;
+  default:
+   category = Category.all;
+    break;
+}
+
+    List<Product> products = getProducts(category);
 
     if (products == null || products.isEmpty) {
       return const <Card>[];
@@ -98,8 +116,7 @@ class HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 //exibir alert
-                alertDialogFull(
-                    product.name, product.price);
+                alertDialogFull(product.name, product.price);
               },
             ),
             Expanded(
